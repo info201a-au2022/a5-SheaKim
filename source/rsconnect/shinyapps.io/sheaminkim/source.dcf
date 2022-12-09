@@ -5,7 +5,9 @@ account: sheaminkim
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7855122
-bundleId: 6614611
+bundleId: 6614733
 url: https://sheaminkim.shinyapps.io/source/
-when: 1670571119.93353
-lastSyncTime: 1670571119.93353
+when: 1670573572.47057
+lastSyncTime: 1670573572.47057
+asMultiple: FALSE
+asStatic: FALSE
