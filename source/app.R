@@ -7,7 +7,13 @@
 #    http://shiny.rstudio.com/
 #
 
+library(dplyr)
 library(shiny)
+library(ggplot2)
+library(tidyverse)
+library(shinythemes)
+library(plotly)
+
 
 # source proper files
 source("app_ui.R")

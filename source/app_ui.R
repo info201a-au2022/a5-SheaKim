@@ -9,6 +9,7 @@
 
 library(shiny)
 library(shinythemes)
+library(plotly)
 
 source("app_server.R")
 

@@ -7,10 +7,11 @@
 #    http://shiny.rstudio.com/
 #
 
+library(dplyr)
 library(shiny)
 library(ggplot2)
 library(tidyverse)
-library(dplyr)
+library(plotly)
 
 # Load data
 df1 <- read.csv("https://raw.githubusercontent.com/info201a-au2022/a5-SheaKim/main/data/owid-co2-data.csv")
