@@ -13,28 +13,9 @@ library(tidyverse)
 library(dplyr)
 
 # Load data
-df1 <- read.csv("../data/owid-co2-data.csv")
+df1 <- read.csv("https://raw.githubusercontent.com/info201a-au2022/a5-SheaKim/main/data/owid-co2-data.csv")
 
-
-# Introduction. The introductory page (tab) should introduce the topic. 
-# Specifically, your report should describe the variables you have chosen 
-# to analyze and make clear measure(s) of CO2 emission you are focusing on.  
-# Then, you should share at least three relevant values of interest. 
-# These will likely be calculated using your DPLYR skills, answering questions 
-# such as: 
-#   
-#   What is the average value of my variable across all the counties (in the current year)?
-#   Where is my variable the highest / lowest?
-#   How much has my variable change over the last N years?
-#   You should calculate these values in your app_server.R file, and display them in your user interface using the appropriate method. 
-# 
-# [ ] Complete: The introductory material, focussed on the specifics of the application 
-# [ ] Complete: Variables and measure of C02 are described
-# [ ] Complete: At least three automatically generated values presented 
-# [ ] Complete: All numbers formatted thoughtfully, with appropriate units
-# [ ] Complete: Effective use of headings, fronts, and other reporting features. 
-
-
+# function to find country w/ highest CO2 per GDP
 country_highest_co2_gdp <- function() {
 
 x <- df1 %>%
@@ -44,9 +25,9 @@ x <- df1 %>%
 return(x)
 }
 
+# year of highest CO2 per GDP
+year_highest_co2_gdp <- function() {
 
-year_highest_co2_gdp <- function(){
-  
   x <- df1 %>%
   filter(co2_per_gdp == max(co2_per_gdp, na.rm = TRUE)) %>%
   pull(year)
@@ -55,8 +36,9 @@ year_highest_co2_gdp <- function(){
 }
 
 
-country_highest_gdp <- function(){
-  
+# country w/ highest GDP function
+country_highest_gdp <- function() {
+
   x <- df1 %>%
   filter(country != "World") %>%
   filter(gdp == max(gdp, na.rm = TRUE)) %>%
@@ -65,67 +47,74 @@ country_highest_gdp <- function(){
   return(x)
 }
 
-year_highest_gdp <- function(){
-  
+# year w/ highest GDP function
+year_highest_gdp <- function() {
+
   x <- df1 %>%
   filter(country != "World") %>%
   filter(gdp == min(gdp, na.rm = TRUE)) %>%
   pull(year)
-  
+
   return(x)
 
 }
 
+# test code
 y <- df1 %>%
   filter(country == "China" | country == "South Korea")
 
 plot1 <- ggplot(y, aes(x = country, y = co2_per_gdp)) +
-  geom_col(aes(x = year, y = co2_per_gdp, fill = country), position = "dodge")+
-  labs(x = "Year", y = "CO2 Emissions per GDP (kg/$ of GDP)", 
-       title = "CO2 Emissions per GDP Over a Yearly Range", caption = "Figure 1. Figure description here")
+  geom_col(aes(x = year, y = co2_per_gdp, fill = country), position = "dodge") +
+  labs(x = "Year", y = "CO2 Emissions per GDP (kg/$ of GDP)",
+       title = "CO2 Emissions per GDP Over a Yearly Range",
+       caption = "Figure 1. Figure description here")
 
 
-
+# df for all country names (options)
 unique <- df1 %>%
   filter(year == "2021")
 
-
+# df for all available years (options)
 dates <- df1 %>%
   filter(country == "Asia")
 
-# Define server logic required to draw a histogram
+
+
 my_server <- function(input, output) {
 
-  # filters dataframe with user choice of 2 states 
-  
-  output$range <- renderPrint({ input$slider1 }) 
-  
+  # outputs a slider
+  output$range <- renderPrint({input$slider1})
+
+  #filters df based on slider years and chosen countries
   choose_countries <- reactive({df1 %>%
       filter(country == input$count1 | country == input$count2) %>%
       filter(year >= input$slider1[1], year <= input$slider1[2])
   })
-  
 
+  #filters df based on slider years and chosen countries
   choose_countries1 <- reactive({df1 %>%
       filter(country == input$count3 | country == input$count4) %>%
       filter(year >= input$slider1[1], year <= input$slider1[2])
-    
+
     })
-  
+
+# renders first plot
   output$graph <- renderPlotly({
-    
+
     ggplot(choose_countries()) +
-      geom_col(aes(x = year, y = co2_per_gdp, fill = country), position = "dodge") +
+      geom_col(aes(x = year, y = co2_per_gdp, fill = country),
+               position = "dodge") +
       labs(x = "Year", y = "CO2 Emissions per GDP (kg/$ of GDP)")
-  
+
   })
 
+# renders second plot
   output$graph1 <- renderPlotly({
-    
+
     ggplot(choose_countries1()) +
       geom_col(aes(x = year, y = gdp, fill = country), position = "dodge") +
       labs(x = "Year", y = "Gross Domestic Product (GDP, in international $)")
-    
+
   })
 
 }

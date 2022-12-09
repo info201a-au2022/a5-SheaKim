@@ -12,6 +12,7 @@ library(shinythemes)
 
 source("app_server.R")
 
+# getting functions from app_server.R
 country_highest_co2_gdp <- country_highest_co2_gdp()
 year_highest_co2_gdp <- year_highest_co2_gdp()
 country_highest_gdp <- country_highest_gdp()
@@ -20,17 +21,19 @@ year_highest_gdp <- year_highest_gdp()
 
 # Define UI for application that draws a histogram
 page_ui <- fluidPage(
-  
+
+# first page
   intro_page <- tabPanel(
-    "Introduction", 
+    "Introduction",
     titlePanel("Introduction"),
-    
+
+# intro text (with values embedded)
       # introduction text
       p("Climate change is and has always been an important issue in our world.
       Referring to long-term shifts in temperature and weather patterns, the Earth's
       average temperature and climate has always fluctuated. However, since the 1800s
       and the onset of human industrialization, climate change has been occurring at 
-      a much faster rate than is sustainable."), 
+      a much faster rate than is sustainable."),
       p("One of the reasons for this is CO2
       emissions. Some activities that release these emissions include burning of 
       fossil fuels, coal, and oil. In this exploration of global CO2 emissions, 
@@ -41,40 +44,42 @@ page_ui <- fluidPage(
       territorial emissions, which do not account for emissions embedded in 
       traded goods.' This value is the ratio between total CO2 emissions per unit 
       of GDP. The country with the highest CO2 by GDP was", paste0(country_highest_co2_gdp),
-      "in", paste0(year_highest_co2_gdp),". In contrast, the country with the highest 
-      GDP (on its own) was", paste0(country_highest_gdp, " in ", year_highest_gdp),"."),
+      "in", paste0(year_highest_co2_gdp), ". In contrast, the country with the highest 
+      GDP (on its own) was", paste0(country_highest_gdp, " in ", year_highest_gdp), "."),
     ),
-  
+
+# chart page
   chart_2 <- tabPanel(
     "Interactive Charts",
     titlePanel("Interactive Charts"),
-    
+
     sidebarLayout(
       sidebarPanel(
-        
-        # 2 dropdown menus to select 2 states
+
+        # 4 dropdown menus to select 4 states (2 per graph)
         selectInput(inputId = "count1", label = "Country 1",
                     choices = unique$country, multiple = FALSE
         ),
         selectInput(inputId = "count2", label = "Country 2",
                     choices = unique$country, multiple = FALSE
         ),
-        
+
         selectInput(inputId = "count3", label = "Country 1",
                     choices = unique$country, multiple = FALSE
         ),
         selectInput(inputId = "count4", label = "Country 2",
                     choices = unique$country, multiple = FALSE
         ),
-        
-        sliderInput("slider1", label = h3("Year Range"), min = 1750, 
+
+# slider ui (year range selection)
+        sliderInput("slider1", label = h3("Year Range"), min = 1750,
                     max = 2021, value = c(1750, 2021)),
-        
+
       ),
-      
-      
+
+# text and graph outputs
       mainPanel(
-        
+
         h3("CO2 Emissions per GDP of Two Countries Over a Yearly Range"),
         plotlyOutput("graph"),
         p("Figure 1. This figure charts the change in CO2 emissions per
@@ -101,19 +106,19 @@ page_ui <- fluidPage(
           policies also generally have lower emissions."),
         p(""),
         p(""),
-        p("Link to GitHub repository : ")
-        
-        
+        p("Link to GitHub repository: https://github.com/info201a-au2022/a5-SheaKim")
+
+
         )
     )
   )
-  
-  
+
+
   )
 
 
 
-
+# navigation bar
 page_ui <- navbarPage(
   theme = shinytheme("cosmo"),
   "Analysis of CO2 Emissions by GDP Unit by Countries",
